@@ -14,16 +14,6 @@ else:
     acc = pd.DataFrame(columns=['in_out', 'value', 'hour', 'minute', 'second', 'day', 'month', 'year']) 
     acc.to_csv('account.csv', index=False)
     
-def access_account():
-    for i in range(len(acc)):
-        print(f"{'In' if acc.loc[i, 'in_out'] == 1 else 'Out'} "
-              f"{acc.loc[i, 'value']} "
-              f"{int(acc.loc[i, 'day'])}/"
-              f"{int(acc.loc[i, 'month'])}/"
-              f"{int(acc.loc[i, 'year'])} - "
-              f"{int(acc.loc[i, 'hour'])}:"
-              f"{int(acc.loc[i, 'minute'])}")
-
 def transfer_in():
     value_current = float(input('Amount to add: '))
     now = dt.datetime.now()
@@ -53,6 +43,16 @@ def transfer_out():
         now.year]
     acc.to_csv('account.csv', index=False)
     print('Removed ', value_current, ' from account.')
+    
+def transaction_history():
+    for i in range(len(acc)):
+        print(f"{'In' if acc.loc[i, 'in_out'] == 1 else 'Out'} "
+              f"{acc.loc[i, 'value']} "
+              f"{int(acc.loc[i, 'day'])}/"
+              f"{int(acc.loc[i, 'month'])}/"
+              f"{int(acc.loc[i, 'year'])} - "
+              f"{int(acc.loc[i, 'hour'])}:"
+              f"{int(acc.loc[i, 'minute'])}")
 
 def total_calc():
     total = 0.0
@@ -65,26 +65,86 @@ def total_calc():
    
     print(f"Total: {total}")
     
-while True:
-
-    act = int(input(
-          '''
-    Options:
-    1. Access Account
-    2. Transfer In
-    3. Transfer Out
-    4. Total
+def account_menu():
+    while True:
+        act = int(input(
+              '''
+    ========== ACCOUNT ==========
+    
+    1. View current balance
+    2. Account overview
+    3. Return to main menu
+    
+    =============================
+              '''))
+        
+        match act:
+            case 1:
+                total_calc()
+            case 2:
+                print('Work in progress')
+            case 3:
+                break
+            case _:
+                print('Invalid option, try again')
+            
+def transactions_menu():
+    while True:
+        act = int(input(
+            '''
+    ======== TRANSACTIONS ========
+    
+    1. Add income
+    2. Add expense
+    3. Transaction history
+    4. Search transactions
+    5. Return to main menu
+    
+    ==============================
+            '''))
+    
+        match act:
+            case 1:
+                transfer_in()
+            case 2:
+                transfer_out()
+            case 3:
+                transaction_history()
+            case 4:
+                print('Work in progress')
+            case 5:
+                break
+            case _:
+                print('Invalid option, try again')
+    
+def main_menu():
+    while True:
+        act = int(input(
+              '''
+    ========== EXPENSE TRACKER ==========
+    
+    1. Account
+    2. Transactions
+    3. Statistics
+    4. Settings
     5. Exit
-          '''))
+    
+    =====================================
+              '''))
+              
+        match act:
+            case 1:
+                account_menu()
+            case 2:
+                transactions_menu()
+            case 3:
+                print('Work in progress')
+            case 4:
+                print('Work in progress')
+            case 5:
+                sys.exit()
+            case _: 
+                print('Invalid option, please try again')
 
-    match act:
-        case 1:
-            access_account()
-        case 2:
-            transfer_in()
-        case 3:
-            transfer_out()
-        case 4:
-            total_calc()
-        case 5:
-            sys.exit()
+main_menu()
+
